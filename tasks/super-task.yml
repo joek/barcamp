@@ -1,0 +1,14 @@
+---
+platform: linux
+
+image: docker:///golang#1.6-alpine
+
+inputs:
+- name: pipeline
+- name: resource-app
+  path: gopath/src/github.com/cloudfoundry-community/simple-go-web-app
+
+run:
+  # path: ls
+  # args: [-alR]
+  path: pipeline/scripts/task-run-test.sh

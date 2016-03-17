@@ -1,0 +1,38 @@
+resources:
+- name: pipeline
+  type: git
+  source:
+    uri: https://github.com/starkandwayne/concourse-tutorial.git
+- name: resource-app
+  type: git
+  source:
+    uri: https://github.com/cloudfoundry-community/simple-go-web-app.git
+- name: cloudfoundry
+  type: cf
+  source:
+    api: {{api-url}}
+    username: {{api-user}}
+    password: {{api-password}}
+    organization: {{api-org}}
+    space: {{api-space}}
+
+
+jobs:
+- name: job-test-app
+  public: true
+  plan:
+  - get: pipeline
+  - get: resource-app
+    trigger: true
+  - task: web-app-tests
+    file: pipeline/tasks/task_run_tests.yml
+- name: deploy-app
+  public: true
+  plan:
+  - get: resource-app
+    trigger: true
+    passed: [job-test-app]
+  - put: cloudfoundry
+    params:
+      manifest: resource-app/manifest.yml
+      path: resource-app
