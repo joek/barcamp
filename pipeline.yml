@@ -2,7 +2,7 @@ resources:
 - name: pipeline
   type: git
   source:
-    uri: https://github.com/starkandwayne/concourse-tutorial.git
+    uri: https://github.com/joek/barcamp.git
 - name: resource-app
   type: git
   source:
